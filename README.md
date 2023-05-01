@@ -5,12 +5,13 @@ with goals and track progress on them.
 python3.10, Django, Postgres
 
 Как запустить:
-
     склонировать репозиторий (git clone git@github.com:yury-yury/todolist_lesson_33.git)
     создать виртуальное окружение (python3 -m venv venv)
     активировать виртуальное окружение(source venv/bin/activate)
     установить зависимости(pip install -r requirements.txt)
-    создать и заполнить файл .env ( DB_ENGINE=django.db.backends.postgresql
+    создать и заполнить файл .env ( SECRET_KEY = 'django-insecure-*79sfgn-qssreox)n#+h&^cz5lo^0)v@+x2e0glv$4lp2r4wis'
+                                    DEBUG = True
+                                    DB_ENGINE=django.db.backends.postgresql
                                     DB_NAME=todolist
                                     DB_USER=postgres
                                     DB_PASSWORD=postgres
