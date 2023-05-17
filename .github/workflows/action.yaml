@@ -8,5 +8,6 @@ jobs:
         uses: actions/checkout@v2
       - name: docker build
         run: docker build -t yuryyury/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
-
+      - name: docker push
+        run: docker push yuryyury/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
 
