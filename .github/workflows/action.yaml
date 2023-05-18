@@ -12,4 +12,23 @@ jobs:
         run: echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: docker push
         run: docker push yuryyury/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+  diploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push
+    steps:
+      - name: clone code
+        uses: actions/checkout@v2
+      - name: render file
+        run: |
+          mkdir todolist
+          cat docker-compose-ci.yaml | envsubst > todolist/docker-compose.yaml
+      - name: copy files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: "todolist/docker-compose.yaml"
+          target: "todolist"
+          strip_components: 1
 
