@@ -35,5 +35,14 @@ jobs:
           source: "todolist_/docker-compose.yaml"
           target: "todolist"
           strip_components: 1
+      - name: start todolist
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd todolist
+            echo ${{ secrets.PASSWORD }} | sudo -S docker compose up -d
 
 
