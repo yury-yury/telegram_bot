@@ -18,9 +18,10 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
-#      - name: creating virtual environment variables
-#        run: |
-#          export DB_
+      - name: creating virtual environment variables
+        run: |
+          export DB_USER=${{ secrets.DB_USER }}
+          export DB_PASSWORD=${{ secrets.DB_PASSWORD }}
       - name: render file
         run: |
           mkdir todolist_
