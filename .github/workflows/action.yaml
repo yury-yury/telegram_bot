@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
+#      - name: creating virtual environment variables
+#        run: |
+#          export DB_
       - name: render file
         run: |
           mkdir todolist_
