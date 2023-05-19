@@ -22,6 +22,10 @@ jobs:
     steps:
       - name: clone code
         uses: actions/checkout@v2
+      - name: render file
+        run: |
+            mkdir todolist_
+            cat docker-compose-ci.yaml | envsubst > todolist_/docker-compose.yaml
       - name: copy files to server
         uses: appleboy/scp-action@master
         with:
