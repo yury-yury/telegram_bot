@@ -87,11 +87,15 @@ DATABASES = {
         'USER': os.environ.get("DB_USER", 'postgres'),
         'PASSWORD': os.environ.get("DB_PASSWORD", 'postgres'),
         'HOST': os.environ.get("DB_HOST", 'localhost'),
-        'PORT': os.environ.get("DB_PORT", '5432'),
+        'PORT': os.environ.get("DB_PORT", '5433'),
     }
 }
 
-REST_FRAMEWORK = {}
+REST_FRAMEWORK = {
+'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication']
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
