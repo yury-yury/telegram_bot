@@ -31,6 +31,7 @@ DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = ['*', ]
 
+APPEND_SLASH = False
 
 # Application definition
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -84,17 +86,18 @@ DATABASES = {
     'default': {
         'ENGINE': os.environ.get("DB_ENGINE", 'django.db.backends.postgresql'),
         'NAME': os.environ.get("DB_NAME", 'todolist'),
-        'USER': os.environ.get("DB_USER", 'postgres'),
-        'PASSWORD': os.environ.get("DB_PASSWORD", 'postgres'),
-        'HOST': os.environ.get("DB_HOST", 'localhost'),
-        'PORT': os.environ.get("DB_PORT", '5433'),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"),
+        'PORT': os.environ.get("DB_PORT"),
     }
 }
 
 REST_FRAMEWORK = {
-'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication']
+        'rest_framework.authentication.SessionAuthentication'
+    ]
 }
 
 # Password validation
@@ -115,6 +118,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_VK_SCOPE = ['email']
+SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/categories'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+SOCIAL_AUTH_USER_MODEL = 'core.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
