@@ -21,6 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls')),
-    # path('oauth/', include('social_django.urls', namespace='social')),
-    path('oauth/login/vk-oauth2', views.auth, name="begin"),
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]
