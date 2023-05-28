@@ -14,7 +14,7 @@ services:
   api:
     build:
       context: .
-    image: yuryyury/todolist
+#    image: yuryyury/todolist
     container_name: api
     command: python manage.py runserver 0.0.0.0:8000
     ports:
@@ -32,7 +32,7 @@ services:
   migrations:
     build:
       context: .
-    image: yuryyury/todolist
+#    image: yuryyury/todolist
     container_name: migrations
     volumes:
       - /home/yury/SkyPro/Home_Work/35/todolist/.env:/todolist/.env

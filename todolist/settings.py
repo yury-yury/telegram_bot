@@ -31,9 +31,9 @@ DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = ['*', ]
 
-APPEND_SLASH = False
-
-TRAILING_SLASH = True
+# APPEND_SLASH = False
+#
+# TRAILING_SLASH = True
 
 # Application definition
 
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'core',
     'social_django',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'todolist.urls'
@@ -132,7 +135,7 @@ SOCIAL_AUTH_VK_SCOPE = ['email']
 SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/categories'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/categories/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
 SOCIAL_AUTH_USER_MODEL = 'core.User'
 
