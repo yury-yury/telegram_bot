@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ['*', ]
 
 APPEND_SLASH = False
 
+TRAILING_SLASH = True
+
 # Application definition
 
 INSTALLED_APPS = [
