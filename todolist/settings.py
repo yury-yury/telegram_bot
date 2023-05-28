@@ -31,9 +31,7 @@ DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = ['*', ]
 
-# APPEND_SLASH = False
-#
-# TRAILING_SLASH = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -46,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
+    'goals',
     'social_django',
     'corsheaders',
 ]
