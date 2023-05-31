@@ -179,7 +179,7 @@ class GoalCommentListView(ListAPIView):
         except for the instance itself. Returns a selection from the database of all instances of the class for which
         the current user is the author.
         """
-        return GoalComment.objects.select_related('user').filter(user=self.request.user).exclude(is_deleted=True)
+        return GoalComment.objects.select_related('user').filter(user=self.request.user)
 
 
 class GoalCommentView(RetrieveUpdateDestroyAPIView):
