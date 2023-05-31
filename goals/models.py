@@ -20,7 +20,6 @@ class DatesModelMixin(models.Model):
 
     created = models.DateTimeField(verbose_name="Дата создания")
     updated = models.DateTimeField(verbose_name="Дата последнего обновления")
-    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs):
         """
@@ -47,30 +46,11 @@ class GoalCategory(DatesModelMixin):
         verbose_name: str = "Категория"
         verbose_name_plural: str = "Категории"
 
+    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
     title = models.CharField(verbose_name="Название", max_length=255)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
 
 
-class Status(models.IntegerChoices):
-    """
-    The Status class inherits from the Integer Choices class from the django.db.models module. Contains possible
-    numeric values and their designations for filling in the status field of the Goal model.
-    """
-    to_do: Tuple[int, str] = 1, "К выполнению"
-    in_progress: Tuple[int, str] = 2, "В процессе"
-    done: Tuple[int, str] = 3, "Выполнено"
-    archived: Tuple[int, str] = 4, "Архив"
-
-
-class Priority(models.IntegerChoices):
-    """
-    The Priority class inherits from the Integer Choices class from the django.db.models module. Contains possible
-    numeric values and their designations for filling in the priority field of the Goal model.
-    """
-    low: Tuple[int, str] = 1, "Низкий"
-    medium: Tuple[int, str] = 2, "Средний"
-    high: Tuple[int, str] = 3, "Высокий"
-    critical: Tuple[int, str] = 4, "Критический"
 
 
 class Goal(DatesModelMixin):
@@ -86,13 +66,34 @@ class Goal(DatesModelMixin):
         verbose_name: str = "Цель"
         verbose_name_plural: str = "Цели"
 
-    category = models.ForeignKey(GoalCategory, on_delete=models.SET_NULL, null=True, verbose_name="Категория")
+    class Status(models.IntegerChoices):
+        """
+        The Status class inherits from the Integer Choices class from the django.db.models module. Contains possible
+        numeric values and their designations for filling in the status field of the Goal model.
+        """
+        to_do: Tuple[int, str] = 1, "К выполнению"
+        in_progress: Tuple[int, str] = 2, "В процессе"
+        done: Tuple[int, str] = 3, "Выполнено"
+        archived: Tuple[int, str] = 4, "Архив"
+
+    class Priority(models.IntegerChoices):
+        """
+        The Priority class inherits from the Integer Choices class from the django.db.models module. Contains possible
+        numeric values and their designations for filling in the priority field of the Goal model.
+        """
+        low: Tuple[int, str] = 1, "Низкий"
+        medium: Tuple[int, str] = 2, "Средний"
+        high: Tuple[int, str] = 3, "Высокий"
+        critical: Tuple[int, str] = 4, "Критический"
+
+    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
+    category = models.ForeignKey(GoalCategory, on_delete=models.CASCADE, verbose_name="Категория")
     title = models.CharField(max_length=256, verbose_name="Название")
     description = models.TextField(null=True, blank=True, verbose_name="Описание")
     status = models.PositiveSmallIntegerField(verbose_name="Статус", choices=Status.choices, default=Status.to_do)
     priority = models.PositiveSmallIntegerField(verbose_name="Приоритет", choices=Priority.choices,
                                                 default=Priority.medium)
-    due_date = models.DateField(verbose_name="Дата дедлайна")
+    due_date = models.DateField(verbose_name="Дата дедлайна", null=True)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
 
 
@@ -110,5 +111,6 @@ class GoalComment(DatesModelMixin):
         verbose_name_plural: str = "Комментарии"
         ordering: List[str] = ["-created"]
 
+    user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
     text = models.TextField(verbose_name="Текст")
     goal = models.ForeignKey(Goal, on_delete=models.CASCADE, verbose_name="Цель")

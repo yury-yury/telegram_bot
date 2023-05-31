@@ -5,7 +5,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDe
 from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import serializers
-from django.db import models
+from django.db import models, transaction
 
 from goals.filters import GoalDateFilter
 from goals.models import GoalCategory, Goal, GoalComment
@@ -47,9 +47,7 @@ class GoalCategoryListView(ListAPIView):
         except for the instance itself. Returns a selection from the database of all instances of the class for which
         the current user is the author and which have the value False in the is_deleted field.
         """
-        return GoalCategory.objects.filter(
-            user=self.request.user, is_deleted=False
-        )
+        return GoalCategory.objects.select_related('user').filter(user=self.request.user).exclude(is_deleted=True)
 
 
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
@@ -70,22 +68,17 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         """
         return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
 
-    def perform_destroy(self, instance: GoalCategory) -> GoalCategory:
+    def perform_destroy(self, instance: GoalCategory) -> None:
         """
         The perform_destroy function overrides the method of the parent class. Takes as an argument an instance
         of the GoalCategory class. Sets the True value in the is_deleted field of the instance, and also sets this
         value for all instances of the Goal class that have a reference to the current category. Saves modified
         instances. Returns an instance of the GoalCategory class.
         """
-        instance.is_deleted = True
-        instance.save()
-
-        list_goal_of_category: list = Goal.objects.filter(category=instance.id).all()
-        for goal in list_goal_of_category:
-            goal.is_deleted = True
-            goal.save()
-
-        return instance
+        with transaction.atomic():
+            instance.is_deleted = True
+            instance.save(update_fields=('is_deleted',))
+            instance.goal_set.update(status=Goal.Status.archived)
 
 
 class GoalCreateView(CreateAPIView):
@@ -124,9 +117,8 @@ class GoalListView(ListAPIView):
         except for the instance itself. Returns a selection from the database of all instances of the class for which
         the current user is the author and which have the value False in the is_deleted field.
         """
-        return Goal.objects.filter(
-            user=self.request.user, is_deleted=False
-        )
+        return Goal.objects.select_related('user').filter(user=self.request.user,
+                                                          is_deleted=False).exclude(is_deleted=True)
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):
@@ -147,15 +139,14 @@ class GoalView(RetrieveUpdateDestroyAPIView):
         """
         return Goal.objects.filter(user=self.request.user, is_deleted=False)
 
-    def perform_destroy(self, instance: Goal) -> Goal:
+    def perform_destroy(self, instance: Goal) -> None:
         """
         The perform_destroy function overrides the method of the parent class. Takes as an argument an instance
         of the Goal class. Sets the value to True in the is_deleted field of the instance. Saves the modified instance.
         Returns an instance of the Goal class.
         """
-        instance.is_deleted = True
-        instance.save()
-        return instance
+        instance.status = Goal.Status.archived
+        instance.save(update_fields=('status',))
 
 
 class GoalCommentCreateView(CreateAPIView):
@@ -188,7 +179,7 @@ class GoalCommentListView(ListAPIView):
         except for the instance itself. Returns a selection from the database of all instances of the class for which
         the current user is the author.
         """
-        return GoalComment.objects.filter(user=self.request.user)
+        return GoalComment.objects.select_related('user').filter(user=self.request.user).exclude(is_deleted=True)
 
 
 class GoalCommentView(RetrieveUpdateDestroyAPIView):
