@@ -33,24 +33,44 @@ class DatesModelMixin(models.Model):
 
 
 class Board(DatesModelMixin):
+    """
+    The Board class inherits from the abstract DatesModelMixin class. Defines the database table fields
+    and their properties.
+    """
     class Meta:
-        verbose_name = "Доска"
-        verbose_name_plural = "Доски"
+        """
+        The Meta class contains the common name of the model instance in the singular and plural used
+        in the administration panel.
+        """
+        verbose_name: str = "Доска"
+        verbose_name_plural: str = "Доски"
 
     title = models.CharField(verbose_name="Название", max_length=255)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
 
 
 class BoardParticipant(DatesModelMixin):
+    """
+    The BoardParticipant class inherits from the abstract DatesModelMixin class. Defines the database table fields
+    and their properties.
+    """
     class Meta:
-        unique_together = ("board", "user")
-        verbose_name = "Участник"
-        verbose_name_plural = "Участники"
+        """
+        The Meta class contains the common name of the model instance in the singular and plural used
+        in the administration panel.
+        """
+        unique_together: Tuple[str, ...] = ("board", "user")
+        verbose_name: str = "Участник"
+        verbose_name_plural: str = "Участники"
 
     class Role(models.IntegerChoices):
-        owner = 1, "Владелец"
-        writer = 2, "Редактор"
-        reader = 3, "Читатель"
+        """
+        The Role class inherits from the Integer Choices class from the django.db.models module. Contains possible
+        numeric values and their designations for filling in the role field of the BoardParticipant model.
+        """
+        owner: Tuple[int, str] = 1, "Владелец"
+        writer: Tuple[int, str] = 2, "Редактор"
+        reader: Tuple[int, str] = 3, "Читатель"
 
     board = models.ForeignKey(Board, verbose_name="Доска", on_delete=models.PROTECT, related_name="participants")
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT, related_name="participants")

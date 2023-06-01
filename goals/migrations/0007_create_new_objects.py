@@ -4,33 +4,31 @@ from django.db import migrations, transaction
 from django.utils import timezone
 
 
-def create_objects(apps, schema_editor):
-    # Для загрузки кода моделей используется специальный метод apps.get_model
-    # Он позволяет загрузить ровно то состояние модели, которое было на момент применения этой миграции
-    # Импортировать настоящие классы – плохая практика
-    # так как в будущем вы можете удалить/переименовать эти модели, и тогда у вас будут ошибки импорта
-
+def create_objects(apps, schema_editor) -> None:
+    """
+    The create_objects function takes an application object as arguments. Creates new Board objects for each user
+    located in the database, and fixes all existing categories on the created boards in accordance with the author.
+    """
     User = apps.get_model("core", "User")
     Board = apps.get_model("goals", "Board")
     BoardParticipant = apps.get_model("goals", "BoardParticipant")
     GoalCategory = apps.get_model("goals", "GoalCategory")
 
-    with transaction.atomic():  # Применяем все изменения одной транзакцией
-        for user in User.objects.all():  # Для каждого пользователя
+    with transaction.atomic():
+        for user in User.objects.all():
             new_board = Board.objects.create(
                 title="Мои цели",
-                created=timezone.now(),  # Проставляем вручную по той же причине, что описана вверху
+                created=timezone.now(),
                 updated=timezone.now()
             )
             BoardParticipant.objects.create(
                 user=user,
                 board=new_board,
-                role=1,  # Владелец, проставляем числом, не импортируем код по той же причине
+                role=1,
                 created=timezone.now(),
                 updated=timezone.now()
             )
 
-            # проставляем всем категориям пользователя его доску
             GoalCategory.objects.filter(user=user).update(board=new_board)
 
 
