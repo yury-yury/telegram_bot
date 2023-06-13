@@ -4,7 +4,7 @@ version: "3.9"
 services:
 
   frontend:
-    image: sermalenk/skypro-front:lesson-37
+    image: sermalenk/skypro-front:lesson-38
     container_name: frontend
     ports:
         - "80:80"
@@ -21,6 +21,20 @@ services:
       - /home/deploy/todolist/django_static:/todolist/django_static
       - /home/deploy/todolist/django_media:/todolist/django_media
       - /home/deploy/todolist/.env:/todolist/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+
+  bot:
+    image: yuryyury/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    container_name: bot
+    command: python manage.py runbot
+    volumes:
+      - /home/deploy/todolist/.env:/todolist/.env
+    environment:
+      TG_TOKEN: ${TG_TOKEN}
     depends_on:
       postgres:
         condition: service_healthy

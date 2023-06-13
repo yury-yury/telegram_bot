@@ -218,7 +218,7 @@ class BoardParticipantSerializer(serializers.ModelSerializer):
     This is a class for convenient serialization and deserialization of objects of the BoardParticipant class when
     processing usage instance of BoardParticipant class.
     """
-    role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role) # editable_choices)
+    role = serializers.ChoiceField(required=True, choices=BoardParticipant.Role)
     user = serializers.SlugRelatedField(slug_field="username", queryset=User.objects.all())
 
     class Meta:

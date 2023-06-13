@@ -4,7 +4,7 @@ version: "3.9"
 services:
 
   frontend:
-    image: sermalenk/skypro-front:lesson-37
+    image: sermalenk/skypro-front:lesson-38
     container_name: frontend
     ports:
         - "88:80"
@@ -43,6 +43,21 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
+  bot:
+    build:
+      context: .
+    container_name: bot
+    command: python manage.py runbot
+    volumes:
+      - /home/yury/SkyPro/Home_Work/35/todolist/.env:/todolist/.env
+    environment:
+      TG_TOKEN: ${TG_TOKEN}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
 
   postgres:
       image: postgres:15.0-alpine

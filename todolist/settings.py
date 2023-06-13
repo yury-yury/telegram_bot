@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'core',
     'goals',
+    'bot',
     'social_django',
     'corsheaders',
 ]
@@ -99,6 +100,8 @@ DATABASES = {
         'PORT': os.environ.get("DB_PORT"),
     }
 }
+
+TG_TOKEN = os.environ.get("TG_TOKEN")
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
