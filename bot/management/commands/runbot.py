@@ -1,5 +1,5 @@
 from dataclasses import field
-from typing import Callable, Dict, Any
+from typing import Callable, Dict, Any, List
 
 from django.core.management import BaseCommand
 from marshmallow_dataclass import dataclass
@@ -67,15 +67,23 @@ class Command(BaseCommand):
 
     def handle_unauthorized_user(self, tg_user: TgUser, message: Message) -> None:
         """
-
+        The handle_unauthorized_user function defines a class method for working with an unauthenticated user.
+        Accept objects of the TgUser and Message classes as arguments. Sends a welcome message to the user, calls
+        the method of adding the verification code to the field of the current user and sends the verification code.
         """
         self.tg_client.send_message(chat_id=message.chat.id, text='Hello')
         tg_user.update_verification_code()
         self.tg_client.send_message(chat_id=message.chat.id, text=f'You verification code: {tg_user.verification_code}')
 
     def handle_authorized_user(self, tg_user: TgUser, message: Message) -> None:
+        """
+        The handle_authorized_user function defines a class method for working with an authenticated user. Accept
+        objects of the TgUser and Message classes as arguments. Checks the text of the received user message,
+        if the text starts with "/" and is contained in the list of valid commands, calls the appropriate method,
+        if the command is not included in the list, sends the message to the user. If the text is not a command,
+        the client writes the text in the argument field.
+        """
         if message.text and message.text.startswith('/'):
-
             if message.text == '/goals':
                 self.handle_goals_command(tg_user=tg_user, message=message)
 
@@ -94,33 +102,57 @@ class Command(BaseCommand):
             client.next_handler(tg_user=tg_user, message=message, **client.data)
 
     def handle_goals_command(self, tg_user: TgUser, message: Message) -> None:
-        goals = Goal.objects.select_related('user').filter(
+        """
+        The handle_goals_command function defines a class method for handling the '/goals' command. Accept objects
+        of the TgUser and Message classes as arguments. Requests all the goals contained in the boards where
+        the current user is a participant, and sends them a message in the appropriate format. If there are no goals,
+        sends a message about it.
+        """
+        goals: List[Goal] = Goal.objects.select_related('user').filter(
             category__board__participants__user=tg_user.user).exclude(is_deleted=True)
+
         if goals:
-            text = 'Your goals:\n' + '\n'.join(f'{goal.id}) {goal.title}' for goal in goals)
+            text: str = 'Your goals:\n' + '\n'.join(f'{goal.id}) {goal.title}' for goal in goals)
         else:
-            text = 'You have not goals'
+            text: str = 'You have not goals'
+
         self.tg_client.send_message(chat_id=tg_user.chat_id, text=text)
 
     def handle_create_command(self, tg_user: TgUser, message: Message) -> None:
+        """
+        The handle_create_command function defines a class method to handle the '/create' command. Accept objects
+        of the TgUser and Message classes as arguments. Requests all categories contained in the boards where
+        the current user is a participant, and sends them a message in the appropriate format If there
+        are no categories, sends a message about it. Writes the following method to the FSMData object to process
+        the request.
+        """
+        categories: List[GoalCategory] = GoalCategory.objects.filter(
+            board__participants__user=tg_user.user).exclude(is_deleted=True)
 
-        categories = GoalCategory.objects.filter(board__participants__user=tg_user.user).exclude(is_deleted=True)
         if not categories:
             self.tg_client.send_message(chat_id=tg_user.chat_id, text='You have not category')
             return
 
-        text = 'Select category to create goal:\n' + '\n'.join(f'{category.id}) {category.title}'
-                                                                for category in categories)
+        text: str = 'Select category to create goal:\n' + '\n'.join(f'{category.id}) {category.title}'
+                                                                    for category in categories)
         self.tg_client.send_message(chat_id=tg_user.chat_id, text=text)
         self.client[tg_user.chat_id] = FSMData(next_handler=self.get_category)
 
     def get_category(self, tg_user: TgUser, message: Message, **kwargs) -> None:
+        """
+        The get_category function defines a class method for further processing of the '/create' command. Accept
+        objects of the TgUser and Message classes as parameters, as well as other named arguments. Makes a request
+        for the category specified by the user from the database, if the category is not found, sends a message
+        about it. Checks the role of the current user in the board containing the selected category, if the user's
+        role does not allow creating goals, sends the corresponding message. Prompts you to enter the name
+        of the target being created. Writes the next handler to the FSMData object.
+        """
         try:
-            category = GoalCategory.objects.get(pk=message.text)
+            category: GoalCategory = GoalCategory.objects.get(pk=message.text)
         except GoalCategory.DoesNotExist:
             self.tg_client.send_message(chat_id=tg_user.chat_id, text='Category not found')
         else:
-            participant = BoardParticipant.objects.filter(board=category.board, user=tg_user.user)[0]
+            participant: BoardParticipant = BoardParticipant.objects.filter(board=category.board, user=tg_user.user)[0]
             if participant.role in [1, 2]:
                 self.client[tg_user.chat_id].next_handler = self.create_goal
                 self.client[tg_user.chat_id].data = {'category': category}
@@ -131,7 +163,14 @@ class Command(BaseCommand):
                                             text='You cannot create a goal in the selected category.')
 
     def create_goal(self, tg_user: TgUser, message: Message, **kwargs) -> None:
-        category = kwargs['category']
+        """
+        The create_goal function defines a class method for further processing of the '/create' command. Accept
+        objects of the TgUser and Message classes as parameters, as well as other named arguments. Creates
+        a goal according to the selected parameters. Sends a message to the user about creating a goal.
+        Deletes an entry about the current state of the current user's dialog with the telegram bot.
+        """
+        category: GoalCategory = kwargs['category']
         Goal.objects.create(category=category, user=tg_user.user, title=message.text)
+
         self.tg_client.send_message(chat_id=tg_user.chat_id, text='New goal created')
         self.client.pop(tg_user.chat_id, None)
