@@ -42,7 +42,7 @@ class Command(BaseCommand):
         The handle function defines a class method to be called when entering a command. It contains the main
         functionality for organizing interaction with a telegram bot.
         """
-        offset = 0
+        offset: int = 0
         self.stdout.write(self.style.SUCCESS('Bot started'))
 
         while True:
@@ -136,7 +136,7 @@ class Command(BaseCommand):
         text: str = 'Select category to create goal:\n' + '\n'.join(f'{category.id}) {category.title}'
                                                                     for category in categories)
         self.tg_client.send_message(chat_id=tg_user.chat_id, text=text)
-        self.client[tg_user.chat_id] = FSMData(next_handler=self.get_category)
+        self.client[tg_user.chat_id].next_handler = self.get_category
 
     def get_category(self, tg_user: TgUser, message: Message, **kwargs) -> None:
         """

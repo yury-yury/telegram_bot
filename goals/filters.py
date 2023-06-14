@@ -17,7 +17,7 @@ class GoalDateFilter(rest_framework.FilterSet):
         of filtering results for these fields.
         """
         model: models.Model = Goal
-        fields: Dict[str, Tuple[str]] = {
+        fields: Dict[str, Tuple[str, ...]] = {
             "due_date": ("lte", "gte"),
             "category": ("exact", "in"),
             "status": ("exact", "in"),
