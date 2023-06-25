@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 from django.db import models, transaction
 
 from core.models import User
@@ -97,11 +97,11 @@ class GoalCreateSerializer(serializers.ModelSerializer):
             _user: BoardParticipant = BoardParticipant.objects.get(user=self.context["request"].user, board=value.board)
 
         except BoardParticipant.DoesNotExist:
-            raise serializers.ValidationError("The user can create goals only in those categories in which "
+            raise exceptions.PermissionDenied("The user can create goals only in those categories in which "
                                               "he is a member of the boards with the role of Owner or Editor")
 
         if _user.role not in [BoardParticipant.Role.owner, BoardParticipant.Role.writer]:
-            raise serializers.ValidationError("The user can create goals only in those categories in which "
+            raise exceptions.PermissionDenied("The user can create goals only in those categories in which "
                                               "he is a member of the boards with the role of Owner or Editor")
 
         return value

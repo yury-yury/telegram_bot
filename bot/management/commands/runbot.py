@@ -170,7 +170,13 @@ class Command(BaseCommand):
         Deletes an entry about the current state of the current user's dialog with the telegram bot.
         """
         category: GoalCategory = kwargs['category']
-        Goal.objects.create(category=category, user=tg_user.user, title=message.text)
+        try:
+            Goal.objects.create(category=category, user=tg_user.user, title=message.text)
 
-        self.tg_client.send_message(chat_id=tg_user.chat_id, text='New goal created')
-        self.client.pop(tg_user.chat_id, None)
+        except Exception:
+            self.tg_client.send_message(chat_id=tg_user.chat_id, text='Error when creating a goal. Try again.')
+            self.client.pop(tg_user.chat_id, None)
+
+        else:
+            self.tg_client.send_message(chat_id=tg_user.chat_id, text='New goal created')
+            self.client.pop(tg_user.chat_id, None)
