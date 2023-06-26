@@ -109,7 +109,11 @@ class Command(BaseCommand):
         sends a message about it.
         """
         goals: List[Goal] = Goal.objects.select_related('user').filter(
-            category__board__participants__user=tg_user.user).exclude(is_deleted=True, category__is_deleted=True)
+            category__board__participants__user=tg_user.user
+            ).exclude(is_deleted=True,
+                      status=Goal.Status.archived,
+                      category__is_deleted=True,
+                      category__board__is_deleted=True)
 
         if goals:
             text: str = 'Your goals:\n' + '\n'.join(f'{goal.id}) {goal.title}' for goal in goals)
