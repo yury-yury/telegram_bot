@@ -59,11 +59,6 @@ class BoardFactory(DateFactoryMixin):
         """
         model: models.Model = Board
 
-    # @factory.post_generation
-    # def with_owner(self, create, owner, **kwargs):
-    #     if owner:
-    #         BoardParticipant.objects.create(board=self, user=owner, role=BoardParticipant.Role.owner)
-
 
 @register
 class BoardParticipantFactory(DateFactoryMixin):
