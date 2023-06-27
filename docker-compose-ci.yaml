@@ -15,8 +15,8 @@ services:
     image: yuryyury/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     container_name: api
     command: python manage.py runserver 0.0.0.0:8000
-    ports:
-      - "8000:8000"
+#    ports:
+#      - "8000:8000"
     volumes:
       - /home/deploy/todolist/django_static:/todolist/django_static
       - /home/deploy/todolist/django_media:/todolist/django_media
@@ -56,8 +56,8 @@ services:
 
   postgres:
       image: postgres:15.0-alpine
-      ports:
-        - "5432"
+#      ports:
+#        - "5432"
       environment:
         POSTGRES_DB: todolist
         POSTGRES_USER: ${DB_USER}

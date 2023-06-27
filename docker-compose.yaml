@@ -17,8 +17,8 @@ services:
 #    image: yuryyury/todolist
     container_name: api
     command: python manage.py runserver 0.0.0.0:8000
-    ports:
-      - "8000:8000"
+#    ports:
+#      - "8000:8000"
     volumes:
       - /home/yury/SkyPro/Home_Work/35/todolist/django_static:/todolist/django_static
       - /home/yury/SkyPro/Home_Work/35/todolist/django_media:/todolist/django_media
@@ -61,8 +61,8 @@ services:
 
   postgres:
       image: postgres:15.0-alpine
-      ports:
-        - "5432"
+#      ports:
+#        - "5432"
       environment:
         POSTGRES_DB: ${DB_NAME}
         POSTGRES_USER: ${DB_USER}
