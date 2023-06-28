@@ -1,6 +1,5 @@
 name: Build and deploy workflow
 on: [push]
-description:
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
