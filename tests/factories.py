@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 from pytest_factoryboy import register
 
-from core.models import User
+from users.models import User
 from goals.models import Board, BoardParticipant, GoalCategory, Goal, GoalComment
 
 

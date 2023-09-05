@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "bb2ed845-33c8-4438-8134-5a420ac54541",
+		"name": "Telegram bot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24610581",
+		"_collection_link": "https://speeding-crater-669833.postman.co/workspace/e6f6425b-9060-44d7-8415-8e00acf1dfaa/collection/24610581-bb2ed845-33c8-4438-8134-5a420ac54541?action=share&source=collection_link&creator=24610581"
+	},
+	"item": [
+		{
+			"name": "127.0.0.1:8000/users/signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"test_user\",\n    \"password\": \"My_password1234\",\n    \"password_repeat\": \"My_password1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/users/signup",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"signup"
+					]
+				},
+				"description": "POST request to register a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:8000/users/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"test_user\",\n    \"password\": \"My_password1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/users/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"login"
+					]
+				},
+				"description": "POST request for user authentication"
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:8000/bot/verify/",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "My_password1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "test_user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"verification_code\": \"FW3ni5LkvGzAdq9x430f\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/bot/verify/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"bot",
+						"verify",
+						""
+					]
+				},
+				"description": "PATCH request to verify the telegram bot and the current user"
+			},
+			"response": []
+		},
+		{
+			"name": "127.0.0.1:8000/message/sent",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "My_password1234",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "test_user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"Congratulations on the successful creation of a telegram bot. Hooray!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/message/sent",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"message",
+						"sent"
+					]
+				},
+				"description": "POST request to send a message to the user"
+			},
+			"response": []
+		}
+	]
+}

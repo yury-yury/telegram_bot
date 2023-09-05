@@ -3,7 +3,7 @@ import requests
 from requests import Response
 
 from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
-from todolist.settings import TG_TOKEN
+from test_task.settings import TG_TOKEN
 
 
 class TgClient:

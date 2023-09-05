@@ -2,7 +2,7 @@ FROM python:3.10-slim
 
 EXPOSE 8000
 
-ENV HOME /todolist
+ENV HOME /test_task
 
 WORKDIR $HOME
 

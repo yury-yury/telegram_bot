@@ -2,9 +2,9 @@ The TodoList application
 provides opportunities to work with meetings, 
 with goals and track progress on them.
 
-###python3.10, Django, Postgres
+### python3.10, Django, Postgres
 
-####Как запустить:
+#### Как запустить:
     - склонировать репозиторий (git clone git@github.com:yury-yury/todolist_lesson_33.git)
     - создать виртуальное окружение (python3 -m venv venv)
     - активировать виртуальное окружение(source venv/bin/activate)

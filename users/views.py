@@ -4,14 +4,14 @@ from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView,
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from core.models import User
-from core.serializers import UserCreateSerializer, LoginSerializer, UserSerializer, UpdatePasswordSerializer
+from users.models import User
+from users.serializers import UserCreateSerializer, LoginSerializer, UserSerializer, UpdatePasswordSerializer
 
 
 class UserCreateView(CreateAPIView):
     """
     The UserCreateView class inherits from the CreateAPIView class from the rest_framework.generics module and is
-    a class-based view for processing requests with POST methods at the address '/core/signup'.
+    a class-based view for processing requests with POST methods at the address '/users/signup'.
     """
     model = User
     serializer_class = UserCreateSerializer
@@ -20,7 +20,7 @@ class UserCreateView(CreateAPIView):
 class LoginView(CreateAPIView):
     """
     The LoginView class inherits from the CreateAPIView class from the rest_framework.generics module and is
-    a class-based view for processing requests with POST methods at the address '/core/login'.
+    a class-based view for processing requests with POST methods at the address '/users/login'.
     """
     serializer_class = LoginSerializer
     permission_classes: list = [AllowAny]
@@ -42,7 +42,7 @@ class ProfileView(RetrieveUpdateDestroyAPIView):
     """
     The ProfileView class inherits from the RetrieveUpdateDestroyAPIView class from the rest_framework.generics module
     and is a class-based view for processing requests with POST, PUT, PATCH and DELETE methods at the address
-     '/core/profile'.
+     '/users/profile'.
     """
     serializer_class = UserSerializer
     queryset = User.objects.all()
@@ -70,7 +70,7 @@ class UpdatePasswordView(UpdateAPIView):
     """
     The UpdatePasswordView class inherits from the UpdateAPIView class from the rest_framework.generics module
     and is a class-based view for processing requests with PUT and PATCH methods at the address
-     '/core/update_password'.
+     '/users/update_password'.
     """
     permission_classes = [IsAuthenticated]
     serializer_class = UpdatePasswordSerializer

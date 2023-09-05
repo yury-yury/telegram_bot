@@ -1,7 +1,7 @@
 from typing import List, Any, Dict
 import pytest
 
-from core.models import User
+from users.models import User
 from goals.models import Goal, Board, GoalCategory
 from goals.serializers import GoalSerializer
 from tests.factories import GoalFactory, GoalCategoryFactory, BoardParticipantFactory

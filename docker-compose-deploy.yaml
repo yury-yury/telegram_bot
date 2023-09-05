@@ -4,14 +4,14 @@ version: "3.9"
 services:
 
   api:
-    build:
-      context: .
+    image:
+      yuryyury/tg_bot:version-1
     container_name: api
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     volumes:
-      - /home/yury/SkyPro/test_task/tg_bot/test_task/.env:/test_task/.env
+      - /home/yury_yury/test_task/.env:/test_task/.env
     depends_on:
       postgres:
         condition: service_healthy
@@ -19,23 +19,23 @@ services:
         condition: service_completed_successfully
 
   migrations:
-    build:
-      context: .
+    image:
+      yuryyury/tg_bot:version-1
     container_name: migrations
     volumes:
-      - /home/yury/SkyPro/test_task/tg_bot/test_task/.env:/test_task/.env
+      - /home/yury_yury/test_task/.env:/test_task/.env
     command: python manage.py migrate
     depends_on:
       postgres:
         condition: service_healthy
 
   bot:
-    build:
-      context: .
+    image:
+      yuryyury/tg_bot:version-1
     container_name: bot
     command: python manage.py runbot
     volumes:
-      - /home/yury/SkyPro/test_task/tg_bot/test_task/.env:/test_task/.env
+      - /home/yury_yury/test_task/.env:/test_task/.env
     environment:
       TG_TOKEN: ${TG_TOKEN}
     depends_on:
@@ -53,8 +53,8 @@ services:
       restart: always
       container_name: postgres
       volumes:
-        - /home/yury/SkyPro/test_task/tg_bot/test_task/postgresdata:/var/lib/postgresql/data
-        - /home/yury/SkyPro/test_task/tg_bot/test_task/.env:/test_task/.env
+        - /home/yury_yury/test_task/postgresdata:/var/lib/postgresql/data
+        - /home/yury_yury/test_task/.env:/test_task/.env
       healthcheck:
         test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
         interval: 5s

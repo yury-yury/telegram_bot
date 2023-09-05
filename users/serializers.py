@@ -6,7 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed, NotAuthenticated
 
-from core.models import User
+from users.models import User
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -50,9 +50,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
         """
         user: User = User(
             username=validated_data['username'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            email=validated_data['email'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', ''),
+            email=validated_data.get('email', ''),
         )
         user.set_password(validated_data['password'])
         user.save()

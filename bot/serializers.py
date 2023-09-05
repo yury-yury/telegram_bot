@@ -21,7 +21,7 @@ class TgUserSerializer(serializers.ModelSerializer):
         """
         The validate_verification_code function defines a class method. Accepts the verification code sent
         by the user as a parameter. Makes a request from the database of the user who has the corresponding code.
-        Sets the found user as the current one. Otherwise raises a ValidationError exception. Returns
+        Sets the found user as the current one. Otherwise, raises a ValidationError exception. Returns
         the received code as a string.
         """
         try:

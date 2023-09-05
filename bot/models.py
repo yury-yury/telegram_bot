@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.crypto import get_random_string
 
-from core.models import User
+from users.models import User
 
 
 class TgUser(models.Model):
@@ -48,4 +48,3 @@ class TgUser(models.Model):
         Returns the generated code as a string.
         """
         return get_random_string(20)
-

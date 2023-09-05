@@ -2,6 +2,7 @@ Django==4.2
 djangorestframework==3.14.0
 django-cors-headers==4.0.0
 django-filter==23.2
+drf-yasg==1.21.7
 marshmallow==3.19.0
 marshmallow_dataclass==8.5.14
 psycopg2-binary==2.9.6

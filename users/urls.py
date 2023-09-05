@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from core.views import UserCreateView, LoginView, ProfileView, UpdatePasswordView
+from users.views import UserCreateView, LoginView, ProfileView, UpdatePasswordView
 
 urlpatterns = [
     path('signup', UserCreateView.as_view()),

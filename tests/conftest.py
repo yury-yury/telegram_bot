@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 
-from core.models import User
+from users.models import User
 
 
 pytest_plugins = 'tests.factories'
