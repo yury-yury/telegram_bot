@@ -70,7 +70,8 @@ u-_m1eIMJ5zg/viewform?usp=sf_link
     - в заголовках установить Authorization - Basic Auth
         - Username
         - Password
-7. Для просмотра отправленных сообщений выполнить GET запрос на URL "62.84.126.31:8000/message/sent"
+7. Для просмотра отправленных сообщений выполнить GET запрос на URL "
+8. "
     - в заголовках установить Authorization - Basic Auth
         - Username
         - Password
