@@ -67,7 +67,7 @@ class UpdateObj:
     response and validation of the received data contained in the value of each element of the update list.
     """
     update_id: int
-    message: Message
+    message: Optional[Message]
 
     class Meta:
         """

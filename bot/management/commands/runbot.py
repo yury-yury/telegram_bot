@@ -42,10 +42,11 @@ class Command(BaseCommand):
         an object of the Message class. Checks user authentication and, depending on the result, calls the appropriate
         methods of the class.
         """
-        tg_user, _ = TgUser.objects.get_or_create(chat_id=message.chat.id)
+        if message is not None:
+            tg_user, _ = TgUser.objects.get_or_create(chat_id=message.chat.id)
 
-        if not tg_user.is_verified:
-            self.handle_unauthorized_user(tg_user, message)
+            if not tg_user.is_verified:
+                self.handle_unauthorized_user(tg_user, message)
 
     def handle_unauthorized_user(self, tg_user: TgUser, message: Message) -> None:
         """
